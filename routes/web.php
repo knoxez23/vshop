@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,7 +33,7 @@ Route::middleware('auth')->group(function () {
 
 # Admin Routes Start
 
-Route::group(['prefix' => 'admin', 'middleware' => 'redirectAdmin'], function() {
+Route::group(['prefix' => 'admin', 'middleware' => 'redirectAdmin'], function () {
     Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('login', [AdminAuthController::class, 'login'])->name('admin.login.post');
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
@@ -40,8 +41,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'redirectAdmin'], function() 
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    /* Product Routes */
+    Route::get('/products', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::post('/products/store', [ProductController::class, 'store'])->name('admin.products.store');
 });
 
 // Admin Routes End
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
